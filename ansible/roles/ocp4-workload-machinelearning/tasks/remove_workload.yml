@@ -1,0 +1,42 @@
+---
+# Implement your Workload deployment tasks here
+
+- name: Setting up workload for user
+  debug:
+    msg: "Setting up workload for user ocp_username = {{ ocp_username }}"
+
+- name: Setting up num_users for workshop
+  debug:
+    msg: "Setting up num_users for workshop num_users = {{ num_users }}"
+
+- name: create usernames
+  set_fact:
+    users: "{{ users | default([]) + ['user'+item | string] }}"
+  loop: "{{ range(1,((num_users | int) + 1)) | list }}"
+
+- name: remove the user Projects
+  shell: >
+    oc delete project {{ item }}-notebooks
+  with_list: "{{ users }}"
+  ignore_errors: yes
+
+- name: delete other projects project
+  k8s:
+    state: absent
+    kind: Project
+    api_version: project.openshift.io/v1
+    definition:
+      metadata:
+        name: "{{ item }}"
+  loop:
+    - labs-infra
+    - knative-serving
+    - knative-sources
+    - knative-eventing
+  ignore_errors: yes
+
+# Leave this as the last task in the playbook.
+- name: Remove workload tasks complete
+  debug:
+    msg: "Remove Workload Tasks completed successfully."
+  when: not silent|bool
