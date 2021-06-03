@@ -31,15 +31,16 @@
 - name: set the console
   set_fact:
     console_url: "{{ console_url_r.stdout | trim }}"
-
-- name: extract route_subdomain
-  k8s_facts:
-    kind: Ingress
-  register: route_subdomain_r
-
+  # 
+  # - name: extract route_subdomain
+  #   k8s_facts:
+  #     kind: Ingress
+  #   register: route_subdomain_r
+  # 
+  # replacing Ingress k8s_facts call with the following fact:
 - name: set the route
   set_fact:
-    route_subdomain: "{{ route_subdomain_r.resources[0].spec.domain | trim }}"
+    route_subdomain: "{{ console_url | regex_search('app.*$') }}"
 
 - name: set bastion_fqdn
   set_fact:
