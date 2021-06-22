@@ -1,24 +1,24 @@
 ---
 # Variables for Amazon Web Services
-guid: rto127
+guid: rto1
 
 num_users: 10
 
 cloud_provider: ec2
 
   # ocp4_installer_version: "4.5.40"
-ocp4_installer_version: "4.7.13"
+ocp4_installer_version: "4.7.16"
 
 worker_instance_count: 2
 
 software_to_deploy: openshift4
 
 # Be sure to put a leading "." in front of the subodmain_base_suffix below
-subdomain_base_suffix: .d8b3.sandbox525.opentlc.com
+subdomain_base_suffix: .c317.sandbox1124.opentlc.com
 ### Route 53 Zone ID (AWS)
 # This is the Route53 HostedZoneId where you will create your Public DNS entries
 # It needs to match the subdomain_base_suffix above, this will be provided by your rhpds sandbox instance
-HostedZoneId: Z07204041A5Z64HEB0222
+HostedZoneId: Z08058812DWNKJ44BA7LE
 
 workshop_che_user_password: 'openshift'
 workshop_openshift_user_password: 'openshift'
