@@ -4,6 +4,8 @@ ocp_username: opentlc-mgr
 silent: False
 
 num_users: 15
+module_type: m1
+
 deploy_ceph_cluster: true
 deploy_opendatahub: true 
 

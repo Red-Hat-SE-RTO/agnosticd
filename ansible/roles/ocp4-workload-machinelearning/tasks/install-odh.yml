@@ -17,10 +17,11 @@
     kind: CustomResourceDefinition
     name: kfdefs.kfdef.apps.kubeflow.org
   register: odh_crd
-  retries: 200
+  retries: 50
   delay: 10
   until: odh_crd.resources | list | length == 1
-
+  ignore_errors: true
+  
 - name: Notify user if odh deployment failed
   when: not odh_crd.resources | list | length == 1
   debug:

@@ -26,24 +26,26 @@
 
 # wait for serverless CRDs
 - name: Wait for knative-serving CRD
-  k8s_facts:
+  k8s_info:
     api_version: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     name: knativeservings.operator.knative.dev
   register: r_knserving_crd
-  retries: 200
+  retries: 40
   delay: 10
   until: r_knserving_crd.resources | list | length == 1
+  ignore_errors: true
 
 - name: wait for serving project to exist
-  k8s_facts:
+  k8s_info:
     kind: Project
     api_version: project.openshift.io/v1
     name: "knative-serving"
   register: r_serving_proj
-  retries: 200
+  retries: 40
   delay: 10
   until: r_serving_proj.resources | list | length == 1
+  ignore_errors: true
 
 - name: create knative serving CR
   k8s:
@@ -54,16 +56,18 @@
     definition: "{{ lookup('file', item ) | from_yaml }}"
   loop:
   - ./files/knative_serving_cr.yaml
+  ignore_errors: true
 
 - name: Wait for knative-eventing project to exist
-  k8s_facts:
+  k8s_info:
     api_version: project.openshift.io/v1
     kind: Project
     name: "knative-eventing"
   register: r_kneventing_project
-  retries: 200
+  retries: 40
   delay: 10
   until: r_kneventing_project.resources | list | length == 1
+  ignore_errors: true
 
 - name: create knative eventing CR
   k8s:
@@ -74,4 +78,4 @@
     definition: "{{ lookup('file', item ) | from_yaml }}"
   loop:
   - ./files/knative_eventing_cr.yaml
-
+  ignore_errors: true

@@ -4,7 +4,7 @@
   debug:
     msg:
     - "user.info: "
-    - "user.info: CCN Roadshow Dev Track provisioned for {{ num_users }} user(s)"
+    - "user.info: Machine Learning Trac for {{ num_users }} user(s)"
 
 - name: output workshop info guides
   debug:
@@ -35,12 +35,6 @@
     - "user.info: "
     - "user.info: OpenShift Console: {{ console_url }}"
     - "user.info: Cluster admin login with '{{ ocp_username }}' / 'r3dh4t1!'"
-    - "user.info: "
-    - "user.info: CodeReady Console: https://codeready-labs-infra.{{ route_subdomain }}"
-    - "user.info: Admin login with 'admin' / 'admin'"
-    - "user.info: "
-    - "user.info: NOTE: Workspaces in CodeReady AND service mesh are provisioned asynchronously and may not"
-    - "user.info: be accessible until rollout finishes shortly."
   when: not silent|bool
 
 # Leave this as the last task in the playbook.
