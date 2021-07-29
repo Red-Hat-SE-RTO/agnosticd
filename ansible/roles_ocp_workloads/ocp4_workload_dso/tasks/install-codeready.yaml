@@ -43,26 +43,26 @@
   retries: "120"
   delay: "15"
 
-- name: Get codeready keycloak deployment
+- name: Get codeready keycloak secret
   k8s_facts:
-    kind: Deployment
+    kind: Secret
     namespace: ocp-workshop
-    name: keycloak
-  register: r_keycloak_deployment
+    name: che-identity-secret
+  register: r_keycloak_secret
 
 - name: show cr
   debug:
-    msg: "existing keycloak deployment: {{ r_keycloak_deployment }}"
+    msg: "existing keycloak secret: {{ r_keycloak_secret }}"
 
 - name: set codeready username fact
   set_fact:
     # yamllint disable-line rule:line-length
-    codeready_sso_admin_username: "{{ r_keycloak_deployment.resources[0].spec.template.spec.containers[0].env | selectattr('name','equalto','SSO_ADMIN_USERNAME') |map (attribute='value') | list | first }}"
+    codeready_sso_admin_username: "{{ r_keycloak_secret.resources[0].data.user | b64decode  }}"
 
 - name: set codeready password fact
   set_fact:
     # yamllint disable-line rule:line-length
-    codeready_sso_admin_password: "{{ r_keycloak_deployment.resources[0].spec.template.spec.containers[0].env | selectattr('name','equalto','SSO_ADMIN_PASSWORD') |map (attribute='value') | list | first }}"
+    codeready_sso_admin_password: "{{ r_keycloak_secret.resources[0].data.password | b64decode  }}"
 
 - name: show codeready keycloak admin username
   debug:

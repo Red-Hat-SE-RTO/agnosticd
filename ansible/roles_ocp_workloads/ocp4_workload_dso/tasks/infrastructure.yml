@@ -4,10 +4,12 @@
 - name: install oscap tools
   raw: yum install -y docker openscap-utils openscap-scanner scap-security-guide
   become: true
+  ignore_errors: true
 
-- name: ensure docker group exists
+
+- name: Ensure podman group exists
   group:
-    name: docker
+    name: podman
     state: present
   become: true
 
@@ -30,20 +32,27 @@
     dest: /etc/containers/registries.conf
     mode: '0644'
     backup: true
-  become: true
   register: reg_result
+  delegate_to: "{{ bastion_internal }}"
 
 - name: create symbolic link between oscap-docker and oscap-podman
   raw: ln -s /usr/bin/oscap-podman /usr/bin/oscap-docker
   become: true
   ignore_errors: true
 
-- name: allow group to use oscap-docker without sudo password
-  lineinfile:
-    dest: /etc/sudoers
-    line: "%docker ALL=NOPASSWD: /usr/bin/oscap-docker"
-    validate: '/usr/sbin/visudo -cf %s'
-  become: true
+#- name: restart docker service
+#  service:
+#    name: docker
+#    state: restarted
+#  become: true
+#  when: reg_result.changed
+
+#- name: allow group to use oscap-docker without sudo password
+#  lineinfile:
+#    dest: /etc/sudoers
+#    line: "%docker ALL=NOPASSWD: /usr/bin/oscap-docker"
+#    validate: '/usr/sbin/visudo -cf %s'
+#  become: true
 
 - name: allow group to use docker without sudo password
   lineinfile:
@@ -121,6 +130,19 @@
 - name: remove limitrange in {{ ocp4_admin_project }}
   command: "{{ ocp4_dso_openshift_cli }} delete limitrange --all -n {{ ocp4_admin_project }}"
   ignore_errors: true
+
+- name: check if project openshift storage project exists
+  command: "{{ ocp4_dso_openshift_cli }} get project openshift-storage"
+  register: ocs_project_result
+  ignore_errors: true
+  changed_when: false
+  tags: always
+
+- name: deploy openshift storage operator
+  import_tasks: ./openshift-storage.yaml
+  become: true
+  when: ocs_project_result is failed
+  tags: always
 
 - name: check if project quay project exists
   command: "{{ ocp4_dso_openshift_cli }} get project {{ ocp4_dso_quay_project_name }}"

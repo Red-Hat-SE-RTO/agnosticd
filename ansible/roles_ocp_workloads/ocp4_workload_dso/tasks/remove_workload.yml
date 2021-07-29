@@ -4,11 +4,6 @@
 - set_fact:
     user_count_end: "{{ (ocp4_dso_user_count_start | int) + (ocp4_dso_user_count | int) - 1 }}"
 
-- name: delete shared project
-  command: "oc delete project {{ ocp4_admin_project }}"
-  ignore_errors: true
-  tags: always
-
 - name: delete user projects
   command: "oc delete project {{ item }}"
   ignore_errors: true
@@ -43,6 +38,16 @@
   ignore_errors: true
   tags: always
 
+- name: delete codeready-workspaces
+  command: oc delete CheCluster codeready-workspaces  -n ocp-workshop
+  ignore_errors: true
+  tags: always
+
+- name: delete checlusters crd
+  command: oc delete crd checlusters.org.eclipse.che
+  ignore_errors: true
+  tags: always
+
 - name: delete rbac-lab project
   command: oc delete project {{ ocp4_dso_rbac_project_name }}
   ignore_errors: true
@@ -52,6 +57,22 @@
   command: oc delete clusterquota/clusterquota-{{ item }}
   ignore_errors: true
   with_sequence: start={{ ocp4_dso_user_count_start }} end={{ user_count_end }} format={{ ocp4_dso_user_format }}
+  tags: always
+
+- name: delete the quay-datastore noobaa
+  command: "{{ ocp4_dso_openshift_cli }} delete -f quay-datastore.noobaa.yaml"
+  ignore_errors: true
+  args:
+    chdir: "{{ ocp4_dso_tmp_dir}}/files"
+
+- name: delete openshift-storage project
+  command: oc delete project openshift-storage
+  ignore_errors: true
+  tags: always
+
+- name: delete shared project
+  command: "oc delete project {{ ocp4_admin_project }}"
+  ignore_errors: true
   tags: always
 
 - name: delete custom builds

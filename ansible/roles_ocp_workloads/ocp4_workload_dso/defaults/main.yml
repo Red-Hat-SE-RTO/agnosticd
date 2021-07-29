@@ -82,7 +82,7 @@ ocp4_dso_quay_user: admin
 ocp4_dso_quay_user_password: admin123
 
 # Quay operator subscription channel
-ocp4_dso_quay_channel: "quay-v3.3"
+ocp4_dso_quay_channel: "quay-v3.5"
 
 # Quay operator csv
 ocp4_dso_quay_csv: "red-hat-quay.v3.3.0"

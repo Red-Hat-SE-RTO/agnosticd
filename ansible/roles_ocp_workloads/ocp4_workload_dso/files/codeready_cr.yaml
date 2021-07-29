@@ -5,34 +5,46 @@ metadata:
   name: codeready-workspaces
   namespace: ocp-workshop
 spec:
-  server:
-    cheImageTag: ''
-    cheFlavor: codeready
-    devfileRegistryImage: ''
-    pluginRegistryImage: ''
-    tlsSupport: true
-    selfSignedCert: false
-    serverMemoryRequest: '2Gi'
-    serverMemoryLimit: '6Gi'
-    customCheProperties:
-      CHE_LIMITS_WORKSPACE_IDLE_TIMEOUT: "0"
+  auth:
+    identityProviderURL: ''
+    identityProviderRealm: ''
+    oAuthSecret: ''
+    identityProviderPassword: ''
+    oAuthClientName: ''
+    initialOpenShiftOAuthUser: true
+    identityProviderClientId: ''
+    identityProviderAdminUserName: ''
+    externalIdentityProvider: false
   database:
+    chePostgresUser: ''
     externalDb: false
     chePostgresHostName: ''
-    chePostgresPort: ''
-    chePostgresUser: ''
     chePostgresPassword: ''
     chePostgresDb: ''
-  auth:
-    openShiftoAuth: false
-    identityProviderImage: ''
-    externalIdentityProvider: false
-    identityProviderURL: ''
-    identityProviderAdminUserName: admin
-    identityProviderPassword: admin
-    identityProviderRealm: ''
-    identityProviderClientId: ''
+    chePostgresPort: ''
+  devWorkspace:
+    enable: false
+  metrics:
+    enable: true
+  server:
+    proxyURL: ''
+    cheClusterRoles: ''
+    proxyPassword: ''
+    nonProxyHosts: ''
+    proxyPort: ''
+    tlsSupport: true
+    allowUserDefinedWorkspaceNamespaces: false
+    serverTrustStoreConfigMapName: ''
+    proxyUser: ''
+    cheWorkspaceClusterRole: ''
+    workspaceNamespaceDefault: <username>-codeready
+    serverExposureStrategy: ''
+    gitSelfSignedCert: false
+    useInternalClusterSVCNames: true
+    cheFlavor: codeready
   storage:
-    pvcStrategy: per-workspace
-    pvcClaimSize: 1Gi
+    postgresPVCStorageClassName: ''
     preCreateSubPaths: true
+    pvcClaimSize: 10Gi
+    pvcStrategy: common
+    workspacePVCStorageClassName: ''
