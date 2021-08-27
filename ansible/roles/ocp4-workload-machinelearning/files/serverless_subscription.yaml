@@ -5,7 +5,7 @@ metadata:
   name: serverless-operator
   namespace: openshift-serverless
 spec:
-  channel: "4.5"
+  channel: stable
   installPlanApproval: Automatic
   name: serverless-operator
   source: redhat-operators
