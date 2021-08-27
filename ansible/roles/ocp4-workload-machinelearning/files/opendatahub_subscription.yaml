@@ -5,7 +5,7 @@ metadata:
   name: opendatahub-operator
   namespace: openshift-operators
 spec:
-  channel: beta
+  channel: stable
   installPlanApproval: Automatic
   name: opendatahub-operator
   source: community-operators
