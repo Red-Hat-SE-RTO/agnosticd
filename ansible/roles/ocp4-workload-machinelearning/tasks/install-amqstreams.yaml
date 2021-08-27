@@ -28,7 +28,7 @@
   debug:
     msg: "user.info: *** AMQ Streams kafka could not be installed ***"
 
-- name: Install kafka in knative-eventing namespace
+- name: Install Knative Kafka Source in knative-eventing namespace
   k8s:
     state: present
     merge_type:
@@ -36,7 +36,7 @@
     - merge
     definition: "{{ lookup('file', file_item ) | from_yaml }}"
   loop:
-  - ./files/knative_eventing_cr.yaml
+  - ./files/knative_kafka_cr.yaml
   loop_control:
     loop_var: file_item
   ignore_errors: yes
