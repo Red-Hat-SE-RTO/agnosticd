@@ -146,7 +146,7 @@
     kind: Job
     definition:
       metadata:
-        name: dbpopulate
+        name: dbpopulate-liquorlabdb
         labels:
           app.kubernetes.io/part-of: ml-app-jobs
       spec:
@@ -156,10 +156,10 @@
         backoffLimit: 6
         template:
           metadata:
-            name: dbpopulate
+            name: dbpopulate-liquorlabdb
           spec:
             containers:
-            - name: dbpopulate
+            - name: dbpopulate-liquorlabdb
               image: mariadb
               command:
               - mysql
@@ -369,7 +369,7 @@
     kind: Job
     definition:
       metadata:
-        name: bucket-worker
+        name: bucket-worker-images
         labels:
           app.kubernetes.io/part-of: ml-app-jobs
       spec:
@@ -379,10 +379,10 @@
         backoffLimit: 6
         template:
           metadata:
-            name: bucket-worker
+            name: bucket-worker-images
           spec:
             containers:
-            - name: bucket-worker
+            - name: bucket-worker-images
               image: registry.access.redhat.com/ubi8/python-36
               env:
               - name: S3_ENDPOINT_URL
@@ -413,7 +413,7 @@
     kind: Job
     definition:
       metadata:
-        name: bucket-worker-liquor
+        name: bucket-worker-liquor-images
         labels:
           app.kubernetes.io/part-of: ml-app-jobs
       spec:
@@ -423,10 +423,10 @@
         backoffLimit: 6
         template:
           metadata:
-            name: bucket-worker-liquor
+            name: bucket-worker-liquor-images
           spec:
             containers:
-            - name: bucket-worker-liquor
+            - name: bucket-worker-liquor-images
               image: registry.access.redhat.com/ubi8/python-36
               env:
               - name: S3_ENDPOINT_URL
@@ -461,7 +461,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: image-server
         labels:
           app: image-server
@@ -481,7 +481,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: liquor-image-server
         labels:
           app: liquor-image-server
@@ -501,7 +501,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: image-generator
         labels:
           app: image-generator
@@ -521,7 +521,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: liquor-image-generator
         labels:
           app: liquor-image-generator
@@ -541,7 +541,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: risk-assessment
         labels:
           app: risk-assessment
@@ -561,7 +561,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: liquor-classifier
         labels:
           app: liquor-classifier
@@ -603,7 +603,7 @@
         source:
           type: Git
           git:
-            uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+            uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
             ref: main
           contextDir: /services/image-generator
 
@@ -626,7 +626,7 @@
         source:
           type: Git
           git:
-            uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+            uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
             ref: main
           contextDir: /services/liquor-image-generator
 
@@ -649,7 +649,7 @@
         source:
           type: Git
           git:
-            uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+            uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
             ref: main
           contextDir: /services/image-server
 
@@ -672,7 +672,7 @@
         source:
           type: Git
           git:
-            uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+            uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
             ref: main
           contextDir: /services/liquor-image-server
 
@@ -695,7 +695,7 @@
         source:
           type: Git
           git:
-            uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+            uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
             ref: main
           contextDir: /services/risk-assessment
 
@@ -718,7 +718,7 @@
         source:
           type: Git
           git:
-            uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+            uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
             ref: main
           contextDir: /services/tf-liquor-classifier
 
@@ -814,10 +814,10 @@
           source:
             type: Git
             git:
-              uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+              uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
               ref: main
             contextDir: /services/image-generator
-    when: run_new_builds_if_already_built|bool or image_gen_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or image_gen_r.resources[0].status.lastVersion|int == 0
 
   - name: Create liquor-image-generator Build
     k8s:
@@ -858,10 +858,10 @@
           source:
             type: Git
             git:
-              uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+              uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
               ref: main
             contextDir: /services/liquor-image-generator
-    when: run_new_builds_if_already_built|bool or liquor_image_gen_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or liquor_image_gen_r.resources[0].status.lastVersion|int == 0
 
   - name: Create image-server Build
     k8s:
@@ -902,10 +902,10 @@
           source:
             type: Git
             git:
-              uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+              uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
               ref: main
             contextDir: /services/image-server
-    when: run_new_builds_if_already_built|bool or image_srv_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or image_srv_r.resources[0].status.lastVersion|int == 0
 
   - name: Create liquor-image-server Build
     k8s:
@@ -946,10 +946,10 @@
           source:
             type: Git
             git:
-              uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+              uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
               ref: main
             contextDir: /services/liquor-image-server
-    when: run_new_builds_if_already_built|bool or liquor_image_srv_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or liquor_image_srv_r.resources[0].status.lastVersion|int == 0
 
   - name: Create risk-assessment Build
     k8s:
@@ -990,10 +990,10 @@
           source:
             type: Git
             git:
-              uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+              uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
               ref: main
             contextDir: /services/risk-assessment
-    when: run_new_builds_if_already_built|bool or risk_ass_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or risk_ass_r.resources[0].status.lastVersion|int == 0
 
   - name: Create liquor-classifier Build
     k8s:
@@ -1034,10 +1034,10 @@
           source:
             type: Git
             git:
-              uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+              uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
               ref: main
             contextDir: /services/tf-liquor-classifier
-    when: run_new_builds_if_already_built|bool or liq_class_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or liq_class_r.resources[0].status.lastVersion|int == 0
 
   ####################################################### BUILDS - Update lastVersion
       
@@ -1046,7 +1046,7 @@
       targetObject: image-generator
       targetNamespace: "{{ demo_ml_project_namespace }}"
       lastVersionUpdate: "{{ (image_gen_r.resources[0].status.lastVersion|int + 1)|int }}"
-    when: run_new_builds_if_already_built|bool or image_gen_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or image_gen_r.resources[0].status.lastVersion|int == 0
 
   - name: Update image-generator lastVersion
     k8s:
@@ -1059,14 +1059,14 @@
     - ./templates/buildconfig_update.yaml.j2
     loop_control:
       loop_var: template_item
-    when: run_new_builds_if_already_built|bool or image_gen_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or image_gen_r.resources[0].status.lastVersion|int == 0
       
   - name: Set facts for liquor-image-generator update
     set_fact:
       targetObject: liquor-image-generator
       targetNamespace: "{{ demo_ml_project_namespace }}"
       lastVersionUpdate: "{{ (liquor_image_gen_r.resources[0].status.lastVersion|int + 1)|int }}"
-    when: run_new_builds_if_already_built|bool or liquor_image_gen_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or liquor_image_gen_r.resources[0].status.lastVersion|int == 0
 
   - name: Update liquor-image-generator lastVersion
     k8s:
@@ -1079,14 +1079,14 @@
     - ./templates/buildconfig_update.yaml.j2
     loop_control:
       loop_var: template_item
-    when: run_new_builds_if_already_built|bool or liquor_image_gen_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or liquor_image_gen_r.resources[0].status.lastVersion|int == 0
       
   - name: Set facts for image-server update
     set_fact:
       targetObject: image-server
       targetNamespace: "{{ demo_ml_project_namespace }}"
       lastVersionUpdate: "{{ (image_srv_r.resources[0].status.lastVersion|int + 1)|int }}"
-    when: run_new_builds_if_already_built|bool or image_srv_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or image_srv_r.resources[0].status.lastVersion|int == 0
 
   - name: Update image-server lastVersion
     k8s:
@@ -1099,14 +1099,14 @@
     - ./templates/buildconfig_update.yaml.j2
     loop_control:
       loop_var: template_item
-    when: run_new_builds_if_already_built|bool or image_srv_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or image_srv_r.resources[0].status.lastVersion|int == 0
       
   - name: Set facts for liquor-image-server update
     set_fact:
       targetObject: liquor-image-server
       targetNamespace: "{{ demo_ml_project_namespace }}"
       lastVersionUpdate: "{{ (liquor_image_srv_r.resources[0].status.lastVersion|int + 1)|int }}"
-    when: run_new_builds_if_already_built|bool or liquor_image_srv_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or liquor_image_srv_r.resources[0].status.lastVersion|int == 0
 
   - name: Update liquor-image-server lastVersion
     k8s:
@@ -1119,14 +1119,14 @@
     - ./templates/buildconfig_update.yaml.j2
     loop_control:
       loop_var: template_item
-    when: run_new_builds_if_already_built|bool or liquor_image_srv_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or liquor_image_srv_r.resources[0].status.lastVersion|int == 0
       
   - name: Set facts for risk-assessment update
     set_fact:
       targetObject: risk-assessment
       targetNamespace: "{{ demo_ml_project_namespace }}"
       lastVersionUpdate: "{{ (risk_ass_r.resources[0].status.lastVersion|int + 1)|int }}"
-    when: run_new_builds_if_already_built|bool or risk_ass_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or risk_ass_r.resources[0].status.lastVersion|int == 0
 
   - name: Update risk-assessment lastVersion
     k8s:
@@ -1139,14 +1139,14 @@
     - ./templates/buildconfig_update.yaml.j2
     loop_control:
       loop_var: template_item
-    when: run_new_builds_if_already_built|bool or risk_ass_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or risk_ass_r.resources[0].status.lastVersion|int == 0
       
   - name: Set facts for liquor-classifier update
     set_fact:
       targetObject: liquor-classifier
       targetNamespace: "{{ demo_ml_project_namespace }}"
       lastVersionUpdate: "{{ (liq_class_r.resources[0].status.lastVersion|int + 1)|int }}"
-    when: run_new_builds_if_already_built|bool or liq_class_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or liq_class_r.resources[0].status.lastVersion|int == 0
 
   - name: Update liquor-classifier lastVersion
     k8s:
@@ -1159,7 +1159,7 @@
     - ./templates/buildconfig_update.yaml.j2
     loop_control:
       loop_var: template_item
-    when: run_new_builds_if_already_built|bool or liq_class_r.resources[0].status.lastVersion|int == 0
+    when: demo_ml_run_new_builds_if_already_built|bool or liq_class_r.resources[0].status.lastVersion|int == 0
 
 ####################################################### DeploymentConfigs
 
@@ -1172,7 +1172,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: image-generator
         labels:
           app: image-generator
@@ -1236,7 +1236,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: liquor-image-generator
         labels:
           app: liquor-image-generator
@@ -1300,7 +1300,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: image-server
         labels:
           app: image-server
@@ -1364,7 +1364,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: liquor-image-server
         labels:
           app: liquor-image-server
@@ -1430,7 +1430,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/msolberg/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: image-server
         namespace: "{{ demo_ml_project_namespace }}"
         labels:
@@ -1458,7 +1458,7 @@
       metadata:
         annotations:
           app.openshift.io/vcs-ref: main
-          app.openshift.io/vcs-uri: 'https://github.com/kenmoini/machine-learning-workshop-labs'
+          app.openshift.io/vcs-uri: 'https://github.com/{{ repo_owner }}/machine-learning-workshop-labs'
         name: liquor-image-server
         namespace: "{{ demo_ml_project_namespace }}"
         labels:
@@ -1567,7 +1567,7 @@
   until: risk_ass_build_wait_r.resources[0].status.phase == "Complete"
   retries: 120
   delay: 30
-  when: wait_for_service_build|bool and (run_new_builds_if_already_built|bool or risk_ass_r.resources[0].status.lastVersion|int == 0)
+  when: demo_ml_wait_for_service_build|bool and (demo_ml_run_new_builds_if_already_built|bool or risk_ass_r.resources[0].status.lastVersion|int == 0)
 
 - name: Wait for the liquor-classifier Build to finish
   k8s_info:
@@ -1579,7 +1579,7 @@
   until: liq_class_build_wait_r.resources[0].status.phase == "Complete"
   retries: 120
   delay: 30
-  when: wait_for_service_build|bool and (run_new_builds_if_already_built|bool or liq_class_r.resources[0].status.lastVersion|int == 0)
+  when: demo_ml_wait_for_service_build|bool and (demo_ml_run_new_builds_if_already_built|bool or liq_class_r.resources[0].status.lastVersion|int == 0)
   
 - name: Create risk-assessment Knative Service
   k8s:
@@ -1761,6 +1761,22 @@
 
 ####################################################### GRAFANA - Dashboards
 
+- name: Create temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: grafana
+  register: tempdir
+
+- name: Download Grafana dashboards
+  get_url:
+    url: "https://raw.githubusercontent.com/{{ repo_owner }}/{{ repo }}/main/dashboards/{{ file_item }}"
+    dest: "{{ tempdir.path }}/{{ file_item }}"
+  loop:
+    - "grafana-liquorlab-dashboard-template.yaml"
+    - "grafana-xraylab-dashboard-template.yaml"
+  loop_control:
+    loop_var: file_item
+
 - name: Create Grafana Dashboards
   community.okd.openshift_process:
     namespace_target: "{{ demo_ml_project_namespace }}"
@@ -1769,10 +1785,16 @@
     state: present
     definition: "{{ lookup('file', file_item ) | from_yaml }}"
   loop:
-  - ./files/xray-grafana-dashboard.yaml
-  - ./files/liquor-grafana-dashboard.yaml
+  - "{{ tempdir.path }}/grafana-liquorlab-dashboard-template.yaml"
+  - "{{ tempdir.path }}/grafana-xraylab-dashboard-template.yaml"
   loop_control:
     loop_var: file_item
+
+- name: Delete temporary files
+  ansible.builtin.file:
+    path: "{{ tempdir.path }}"
+    state: absent
+  when: tempdir.path is defined
 
 ####################################################### LABELS
 
@@ -1794,7 +1816,7 @@
     - merge
     definition: "{{ lookup('template', template_item ) | from_yaml }}"
   loop:
-  - ./roles/ocp4-workloads-ml-liquorlab/templates/label_update.yaml.j2
+  - templates/label_update.yaml.j2
   loop_control:
     loop_var: template_item
 
@@ -1816,7 +1838,7 @@
     - merge
     definition: "{{ lookup('template', template_item ) | from_yaml }}"
   loop:
-  - ./roles/ocp4-workloads-ml-liquorlab/templates/label_update.yaml.j2
+  - templates/label_update.yaml.j2
   loop_control:
     loop_var: template_item
 
@@ -1838,7 +1860,7 @@
     - merge
     definition: "{{ lookup('template', template_item ) | from_yaml }}"
   loop:
-  - ./roles/ocp4-workloads-ml-liquorlab/templates/label_update.yaml.j2
+  - templates/label_update.yaml.j2
   loop_control:
     loop_var: template_item
 
@@ -1860,7 +1882,7 @@
     - merge
     definition: "{{ lookup('template', template_item ) | from_yaml }}"
   loop:
-  - ./roles/ocp4-workloads-ml-liquorlab/templates/label_update.yaml.j2
+  - templates/label_update.yaml.j2
   loop_control:
     loop_var: template_item
 
@@ -1881,7 +1903,7 @@
     - merge
     definition: "{{ lookup('template', template_item ) | from_yaml }}"
   loop:
-  - ./roles/ocp4-workloads-ml-liquorlab/templates/label_update.yaml.j2
+  - templates/label_update.yaml.j2
   loop_control:
     loop_var: template_item
 
@@ -1913,20 +1935,7 @@
     - merge
     definition: "{{ lookup('template', template_item ) | from_yaml }}"
   loop:
-  - ./roles/ocp4-workloads-ml-liquorlab/templates/label_update.yaml.j2
+  - templates/label_update.yaml.j2
   loop_control:
     loop_var: template_item
   when: jupyterhub_pod_r.resources|length > 0
-
-####################################################### COMPLETE!
-
-- name: COMPLETE - Display needed resources
-  debug:
-    msg:
-      - Machine Learning Pipeline Demo successfully launched!
-      - "=================================================================="
-      - "- OpenShift Console: https://{{ console_route_r.resources[0].status.ingress[0].host }}"
-      - "- Image Server: http://{{ image_srv_route_r.resources[0].status.ingress[0].host }}"
-      - "- Liquor Image Server: http://{{ liquor_image_srv_route_r.resources[0].status.ingress[0].host }}"
-      - "- Grafana Server: https://{{ grafana_route_r.resources[0].status.ingress[0].host }}"
-      - "- JupyterHub: https://{{ jupyter_route_r.resources[0].status.ingress[0].host }}"
