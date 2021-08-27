@@ -12,7 +12,7 @@
 
 # wait for odh CRDs
 - name: Wait for ODH CRD
-  k8s_facts:
+  k8s_info:
     api_version: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     name: kfdefs.kfdef.apps.kubeflow.org
