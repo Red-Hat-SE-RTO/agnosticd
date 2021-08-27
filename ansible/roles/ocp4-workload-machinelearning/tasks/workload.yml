@@ -9,9 +9,22 @@
   debug:
     msg: "Setting up num_users for workshop num_users = {{ num_users }}"
 
-- name: Give access to opentlc-mgr
-  shell: |
-         oc adm policy add-cluster-role-to-user cluster-admin {{ ocp_username }}
+- name: Give cluster-admin to {{ ocp_username }}
+  k8s:
+    state: present
+    definition:
+      kind: ClusterRoleBinding
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        name: "cluster-admin-{{ ocp_username }}"
+      subjects:
+        - kind: User
+          apiGroup: rbac.authorization.k8s.io
+          name: "{{ ocp_username }}"
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: cluster-admin
 
 ################################################################################ PREFLIGHT - Projects
 
