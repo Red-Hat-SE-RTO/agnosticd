@@ -12,6 +12,9 @@ deploy_demo: false
 
 guides_url: "https://raw.githubusercontent.com/Red-Hat-SE-RTO/machine-learning-workshop-guides/main"
 
+repo_owner: kenmoini
+repo: machine-learning-workshop-labs
+
 workshop_openshift_user_name: userXX
 workshop_openshift_user_password: 'openshift'
 
