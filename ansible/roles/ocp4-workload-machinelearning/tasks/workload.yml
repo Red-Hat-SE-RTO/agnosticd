@@ -121,6 +121,12 @@
   - operator_install
   - odh_operator
 
+################################################################################ Demo Workloads
+
+- name: Deploy ML demonstration
+  include_tasks: deploy-demo.yaml
+  when: deploy_demo|bool
+
 ################################################################################ Workshop Workloads
 
 - name: install guides
