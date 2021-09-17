@@ -15,12 +15,17 @@
   loop: "{{ range(1,((num_users | int) + 1)) | list }}"
 
 - name: remove the user Projects
-  shell: >
-    oc delete project {{ item }}-notebooks
+  k8s:
+    state: absent
+    kind: Project
+    api_version: project.openshift.io/v1
+    definition:
+      metadata:
+        name: "{{ item }}-notebooks"
   with_list: "{{ users }}"
   ignore_errors: yes
 
-- name: delete other projects project
+- name: delete other projects
   k8s:
     state: absent
     kind: Project
@@ -33,6 +38,7 @@
     - knative-serving
     - knative-sources
     - knative-eventing
+    - "{{ demo_ml_project_namespace }}"
   ignore_errors: yes
 
 # Leave this as the last task in the playbook.

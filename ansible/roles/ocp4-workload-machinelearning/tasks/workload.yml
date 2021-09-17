@@ -9,9 +9,24 @@
   debug:
     msg: "Setting up num_users for workshop num_users = {{ num_users }}"
 
-- name: Give access to opentlc-mgr
-  shell: |
-         oc adm policy add-cluster-role-to-user cluster-admin {{ ocp_username }}
+- name: Give cluster-admin to {{ ocp_username }}
+  k8s:
+    state: present
+    definition:
+      kind: ClusterRoleBinding
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        name: "cluster-admin-{{ ocp_username }}"
+      subjects:
+        - kind: User
+          apiGroup: rbac.authorization.k8s.io
+          name: "{{ ocp_username }}"
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: cluster-admin
+
+################################################################################ PREFLIGHT - Projects
 
 - name: create labs-infra project
   k8s:
@@ -24,6 +39,10 @@
         annotations:
           openshift.io/description: ""
           openshift.io/display-name: "Lab Infrastructure"
+  tags:
+  - preflight
+  - create_projects
+  - infra_project
 
 - name: create notebooks user projects
   include_tasks: create_project.yaml
@@ -31,56 +50,97 @@
     name: "{{ item[0] }}-notebooks"
     user: "{{ item[0] }}"
   loop: "{{ users|product(['notebooks'])|list }}"
+  tags:
+  - preflight
+  - create_projects
+  - user_projects
 
-# Setup OpenShift Serverless via operator
+################################################################################ OPERATORS - Serverless
 - name: Look for serverless subscription
-  k8s_facts:
+  k8s_info:
     api_version: operators.coreos.com/v1alpha1
     kind: Subscription
     name: serverless-operator
-    namespace: openshift-operators
+    namespace: openshift-serverless
   register: r_serverless_sub
+  tags:
+  - operator_checks
+  - serverless_operator
 
 - name: show existing serverless sub
   debug:
     msg: "existing serverless sub: {{ r_serverless_sub }}"
+  tags:
+  - operator_checks
+  - serverless_operator
 
 - name: Create OpenShift Objects for Serverless (knative)
-  when: r_serverless_sub.resources | list | length == 0
   include_tasks: install-serverless.yaml
+  when: r_serverless_sub.resources | list | length == 0
+  tags:
+  - operator_install
+  - serverless_operator
 
-# Setup AMQ via operator
-- name: Look for amq subscription
-  k8s_facts:
+################################################################################ OPERATORS - AMQ Streams
+- name: Look for AMQ subscription
+  k8s_info:
     api_version: operators.coreos.com/v1alpha1
     kind: Subscription
     name: amq-streams
     namespace: openshift-operators
   register: r_amq_sub
+  tags:
+  - operator_checks
+  - amq_operator
 
 - name: show existing amq sub
   debug:
     msg: "existing amq sub: {{ r_amq_sub }}"
+  tags:
+  - operator_checks
+  - amq_operator
 
 - name: Create OpenShift Objects for Kafka (amq streams)
-  when: r_amq_sub.resources | list | length == 0
   include_tasks: install-amqstreams.yaml
+  when: r_amq_sub.resources | list | length == 0
+  tags:
+  - operator_install
+  - amq_operator
+
+################################################################################ OPERATORS - Open Data Hub
 
 - name: Look for Open Data Hub subscription
-  k8s_facts:
+  k8s_info:
     api_version: operators.coreos.com/v1alpha1
     kind: Subscription
     name: opendatahub-operator
     namespace: openshift-operators
   register: r_odh_sub
+  tags:
+  - operator_checks
+  - odh_operator
 
 - name: show existing Open Data Hub subscription
   debug:
     msg: "existing ODH sub: {{ r_odh_sub }}"
+  tags:
+  - operator_checks
+  - odh_operator
   
 # Install Open Data Hub 
 - name: Install Open Data Hub
   include_tasks: install-odh.yml
+  tags:
+  - operator_install
+  - odh_operator
+
+################################################################################ Demo Workloads
+
+- name: Deploy ML demonstration
+  include_tasks: deploy-demo.yaml
+  when: deploy_demo|bool
+
+################################################################################ Workshop Workloads
 
 - name: install guides
   include_tasks: install-guides.yaml
@@ -88,6 +148,7 @@
 - name: install username distribution
   include_tasks: install-username-distribution.yaml
 
+################################################################################ COMPLETE!
 # Leave this as the last task in the playbook.
 - name: workload tasks complete
   debug:

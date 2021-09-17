@@ -4,7 +4,7 @@
   debug:
     msg:
     - "user.info: "
-    - "user.info: Machine Learning Trac for {{ num_users }} user(s)"
+    - "user.info: Machine Learning Track for {{ num_users }} user(s)"
 
 - name: output workshop info guides
   debug:
@@ -36,6 +36,19 @@
     - "user.info: OpenShift Console: {{ console_url }}"
     - "user.info: Cluster admin login with '{{ ocp_username }}' / 'r3dh4t1!'"
   when: not silent|bool
+
+- name: output demo info
+  debug:
+    msg:
+      - "user.info: "
+      - "user.info: Machine Learning Pipeline Demo successfully launched!"
+      - "user.info: =================================================================="
+      - "user.info: - OpenShift Console: https://{{ console_route_r.resources[0].status.ingress[0].host }}"
+      - "user.info: - Image Server: http://{{ image_srv_route_r.resources[0].status.ingress[0].host }}"
+      - "user.info: - Liquor Image Server: http://{{ liquor_image_srv_route_r.resources[0].status.ingress[0].host }}"
+      - "user.info: - Grafana Server: https://{{ grafana_route_r.resources[0].status.ingress[0].host }}"
+      - "user.info: - JupyterHub: https://{{ jupyter_route_r.resources[0].status.ingress[0].host }}"
+  when: not silent|bool and deploy_demo|bool
 
 # Leave this as the last task in the playbook.
 - name: post_workload tasks complete

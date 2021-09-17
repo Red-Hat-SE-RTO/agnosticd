@@ -8,6 +8,8 @@
     apply:
       become: "{{ become_override | bool }}"
   when: ACTION == "create" or ACTION == "provision"
+  tags:
+    - pre_workload
 
 - name: Running Workload Tasks
   include_tasks:
@@ -15,6 +17,8 @@
     apply:
       become: "{{ become_override | bool }}"
   when: ACTION == "create" or ACTION == "provision"
+  tags:
+    - workload
 
 - name: Running Post Workload Tasks
   include_tasks:
@@ -22,6 +26,8 @@
     apply:
       become: "{{ become_override | bool }}"
   when: ACTION == "create" or ACTION == "provision"
+  tags:
+    - post_workload
 
 - name: Running Workload removal Tasks
   include_tasks:
@@ -29,3 +35,5 @@
     apply:
       become: "{{ become_override | bool }}"
   when: ACTION == "destroy" or ACTION == "remove"
+  tags:
+    - remove_workload
