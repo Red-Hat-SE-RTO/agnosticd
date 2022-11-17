@@ -1,5 +1,6 @@
 ---
-apiVersion: operator.knative.dev/v1alpha1
+# apiVersion: operator.knative.dev/v1alpha1
+apiVersion: operator.knative.dev/v1
 kind: KnativeEventing
 metadata:
   name: knative-eventing
